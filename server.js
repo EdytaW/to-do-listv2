@@ -1,9 +1,15 @@
 const express = require('express');
+const path = require('path');
 const socket = require('socket.io');
 
 const tasks = [];
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, '/client/build')));
+app.get('*', (req, res) => {
+    res.render(path.join(__dirname, '/client/build/index.html'));
+});
 
 const server = app.listen(process.env.PORT || 8000, () => {
   console.log('Server is running...');

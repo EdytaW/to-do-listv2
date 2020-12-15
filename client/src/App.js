@@ -12,6 +12,19 @@ class App extends React.Component {
     this.socket.on('removeTask', (taskId) => this.removeTask(taskId));	   
     this.socket.on('updateTask', (tasks) => this.updateTask(tasks));	   
   }
+
+  updateTaskName(event) {
+    this.setState({
+      ...this.state,
+      taskName: event.target.value
+    });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    this.socket.emit('addTask', this.state.taskName);
+  };
+  
   render() {
     return (
       <div className="App">
@@ -24,9 +37,9 @@ class App extends React.Component {
           <h2>Tasks</h2>
     
           <ul className="tasks-section__list" id="tasks-list">
-            {tasks === undefined || tasks.length < 1
+            {this.state.tasks === undefined || this.state.tasks.length < 1
               ? ''
-              : tasks.map((task) => (
+              : this.state.tasks.map((task) => (
                   <li key={task.id} className='task'>
                     {task.name}	               
                     <button	                   
@@ -39,9 +52,9 @@ class App extends React.Component {
                 ))}	                
           </ul>
     
-          <form id="add-task-form">
-            <input className="text-input" autocomplete="off" type="text" placeholder="Type your description" id="task-name" />
-            <button className="btn" type="submit">Add aaa</button>
+          <form id="add-task-form" onSubmit={(event) => this.onSubmit(event)}>
+            <input className="text-input" autocomplete="off" onChange={(event) => this.updateTaskName(event)} value={this.state.taskName} type="text" placeholder="Type your description" id="task-name" />
+            <button className="btn" type="submit">Add</button>
           </form>
     
         </section>
