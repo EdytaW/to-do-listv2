@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
       io.emit('addTaskFromServer', newTask);
     });
     socket.on('removeTask', (taskId) => {
-      const taskIndex = tasks.findIndex(tsk => task.id === taskId);
+      const taskIndex = tasks.findIndex(task => task.id === taskId);
         tasks.splice(taskIndex, 1);
         io.emit('removeTaskFromServer', taskId);
   });
