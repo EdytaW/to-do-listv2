@@ -20,14 +20,21 @@ const io = socket(server);
 io.on('connection', (socket) => {
     socket.emit('updateTask', tasks);
     socket.on('addTask', (task) => {
-      tasks.push(task);
-      console.log('task',tasks )
-      socket.broadcast.emit('updateTask', tasks);
+      const newTask = {
+        id: tasks.length + 1,
+        name: task 
+      }
+      tasks.push({
+        id: tasks.length + 1,
+        name:task
+      });
+      tasks.push(newTask);
+      io.emit('addTaskFromServer', newTask);
     });
-    socket.on('removeTask', (taskIndex) => {
+    socket.on('removeTask', (taskId) => {
+      const taskIndex = tasks.findIndex(tsk => task.id === taskId);
         tasks.splice(taskIndex, 1);
-        socket.broadcast.emit('updateTask', tasks);
-        console.log('task',tasks )
+        io.emit('removeTaskFromServer', taskId);
   });
 });
 

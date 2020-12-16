@@ -9,7 +9,8 @@ class App extends React.Component {
 
   componentDidMount() {
     this.socket = io.connect('http://localhost:8000');	    
-    this.socket.on('removeTask', (taskId) => this.removeTask(taskId));	   
+    this.socket.on('removeTaskFromServer', (taskId) => this.removeTask(taskId));
+    this.socket.on('addTaskFromServer', (task) => this.addTask(task));	   
     this.socket.on('updateTask', (tasks) => this.updateTask(tasks));	   
   }
 
@@ -20,10 +21,35 @@ class App extends React.Component {
     });
   }
 
+  updateTask(tasks){
+    this.setState({
+      ...this.state,
+      tasks
+    })
+  }
+
   onSubmit(event) {
     event.preventDefault();
     this.socket.emit('addTask', this.state.taskName);
   };
+
+  addTask(task) {
+    this.setState({
+      ...this.state,
+      tasks: [...this.state.tasks, task]
+    });
+  }
+
+  removeTask(taskId) {
+    this.setState({
+      ...this.state,
+      tasks: this.state.tasks.filter(task => task.is === taskId)
+    });
+  }
+
+  handleRemoveTask(id) {
+    this.socket.emit('removeTask', id);
+  }
   
   render() {
     return (
