@@ -23,11 +23,7 @@ io.on('connection', (socket) => {
       const newTask = {
         id: tasks.length + 1,
         name: task 
-      }
-      tasks.push({
-        id: tasks.length + 1,
-        name:task
-      });
+      };
       tasks.push(newTask);
       io.emit('addTaskFromServer', newTask);
     });
